@@ -7,7 +7,7 @@ const { fetchAndStoreCryptoPrices } = require('./services/cryptoService');
 connectDB();
 
 // Schedule the job to run every 2 hours
-cron.schedule('0 * */10 * *', async () => {
+cron.schedule('1 * * * *', async () => {
     console.log('Running crypto price update job...');
     await fetchAndStoreCryptoPrices();
 });
