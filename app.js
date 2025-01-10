@@ -14,7 +14,23 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Use the crypto stats routes
 app.use('/crypto-stats', cryptoStatsRouter);
 
+// Add error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message
+    });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-}); 
+
+// Change the listen block to only run when not in Vercel
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+// Make sure to export the app
+module.exports = app; 
