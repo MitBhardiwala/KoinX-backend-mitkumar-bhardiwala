@@ -2,7 +2,13 @@ require('dotenv').config();
 const { fetchAndStoreCryptoPrices } = require('../services/cryptoService');
 const connectDB = require('../config/database');
 
-export default async function handler(req, res) {
+// Change to CommonJS export for Vercel
+module.exports = async function handler(req, res) {
+    // Verify the request is from Vercel's cron job
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
     try {
         // Connect to MongoDB
         await connectDB();
